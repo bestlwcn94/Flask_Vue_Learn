@@ -7,23 +7,29 @@ const userinfo =reactive(
       password:''
     }
 )
-const submit = ()=>{
+const submit111 = ()=>{
     console.log(userinfo)
 }
 </script>
 
 <template>
+  <form >
   <div>
-    <input title="text" placeholder="用户名" v-model="userinfo.name">
+    <input title="text" placeholder="用户名11" v-model="userinfo.name">
   </div>
   <div>
-    <input title="text" placeholder="密码" v-model = "userinfo.password">
+    <input title="text" placeholder="密码22" v-model = "userinfo.password">
   </div>
   <div>
-    <button title="text" @click="submit"></button>
-  </div>>
+    <button class="sigio"  title="text11111111"  type='submit' @click="submit111" >提交</button>
+  </div>
+  </form>
 </template>
 
-<style scoped>
-
+<style>
+.sigio{
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
 </style>
