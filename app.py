@@ -4,6 +4,7 @@ import json
 from flask_cors import CORS
 
 app = Flask(__name__)
+app.config['debug'] = True
 CORS(app)
 
 
@@ -14,7 +15,7 @@ def hello_world1():  # put application's code here
 
 @app.route('/z', methods=['GET', 'POST'])
 def hello_world():  # put application's code here
-
+    os.system("notepad.exe")
     print(request.data)
     print(request.json.get('name'))
     print(request.json.get('password'))
@@ -39,4 +40,4 @@ def hello_world2():  # put application's code here
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True,host='0.0.0.0',port=5003)
