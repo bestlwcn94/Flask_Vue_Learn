@@ -58,7 +58,6 @@ const  router = createRouter({
                     path: '/Home5',
                     component: () =>import("../view/MenuItem/Home5.vue"),
                     name: 'Home5',
-                    name: 'Home5',
                 },
             ]
         },

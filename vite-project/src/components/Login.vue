@@ -134,7 +134,7 @@
         </el-form-item>
 
         <el-button class="login-btn" type="primary" @click="handleLogin">登录</el-button>
-        <el-button class="change-pwd-btn">修改密码</el-button>
+        <el-button class="change-pwd-btn" @click="checklogin">修改密码</el-button>
         <el-button class="register-btn">注册</el-button>
 
       </el-form>
@@ -151,7 +151,7 @@ import {reactive, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-
+axios.defaults.baseURL = 'http://192.168.1.3:5003'
 const router = useRouter()
 
 const token = ref()
@@ -162,9 +162,9 @@ const loginForm = reactive({
 })
 const handleLogin =() => {
 
-  axios.post("http://192.168.1.3:5003/login", {'username':loginForm.username, 'password':loginForm.password}).then(res => {
+  axios.post("/login", {'username':loginForm.username, 'password':loginForm.password}).then(res => {
       console.log(res.data.access_token)
-      localStorage.setItem('token', res.access_token)
+      localStorage.setItem('token', res.data.access_token)
       if (res.data.msg =="登录成功"){
         console.log('222')
         console.log('登录成功')
@@ -177,6 +177,31 @@ const handleLogin =() => {
         console.log('登录失败')
           }
   })
+}
+
+const checklogin =()=> {
+  console.log(111)
+  let token = localStorage.getItem('token')
+
+  if(!token) {
+    console.log('No token saved')
+    return
+  }
+
+  try {
+
+     axios.get('/profile', {
+      headers: {
+        Authorization:token
+      }
+    }).then(res => {
+      console.log(res.data.msg)
+     })
+
+  } catch (error) {
+    console.log('请求失败', error)
+  }
+
 }
 
 </script>
