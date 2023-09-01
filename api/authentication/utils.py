@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime as dt
 
 import jwt
 
@@ -7,16 +7,18 @@ import jwt
 def generate_token(user):
     payload = {
         'sub': user,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        'exp': dt.datetime.utcnow() + dt.timedelta(days=1)
     }
-    token = jwt.encode(payload, 'secret', algorithm='HS256')
+    token = jwt.encode(payload, 'secret', 'HS256')
+    print("generate_token", token,len(token))
     return token
 
 
 # 验证JWT
 def validate_token(token):
     try:
-        payload = jwt.decode(token, 'secret', algorithm='HS256')
-        return payload['sub']
+        print("validate_token", token,len(token))
+        payload = jwt.decode(token, 'secret', 'HS256')
+        return payload
     except:
         return False

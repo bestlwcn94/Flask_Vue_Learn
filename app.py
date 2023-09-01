@@ -1,14 +1,16 @@
 from flask import Flask, request, escape, jsonify, make_response
 import os
-import json
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, create_access_token
-import datetime
+from api.authentication.user import   auth_bp
 app = Flask(__name__)
+app.register_blueprint(auth_bp)
 app.config['debug'] = True
 CORS(app)
 
-
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Headers', 'Authorization')
+  return response
 @app.route('/', methods=['GET', 'POST'])
 def hello_world1():  # put application's code here
     return 'Hello World1111111!'

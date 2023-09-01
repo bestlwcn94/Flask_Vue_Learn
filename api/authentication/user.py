@@ -1,7 +1,6 @@
-from utils import validate_token,generate_token
+from api.authentication.utils import validate_token,generate_token
 from flask import Blueprint, request, jsonify
 auth_bp = Blueprint('user', __name__)
-
 
 from flask import Blueprint, request, jsonify
 
@@ -12,42 +11,65 @@ users = {
 }
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST','OPTIONS'])
 def login():
-    username = request.json.get('username')
-    password = request.json.get('password')
+    if request.method == 'OPTIONS':
+        # 返回响应头部信息
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        }
+        return '', 200, headers
+    if request.method == 'POST':
 
-    if not username or not password:
-        return jsonify({'error': 'Missing credentials'}), 400
+        username = request.json.get('username')
+        password = request.json.get('password')
 
-    if username not in users or users[username] != password:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        if not username or not password:
+            return jsonify({'error': 'Missing credentials'}), 400
 
-    access_token = generate_token(username)
-    return jsonify({'message': 'Login successful!'}), 200
+        if username not in users or users[username] != password:
+            return jsonify({'error': 'Invalid credentials'}), 401
+        if users[username] == password:
+            access_token = generate_token(username)
+            return jsonify({'msg': 'Login successful!','Authorization':access_token}), 200
 
 
-@auth_bp.route('/profile')
+@auth_bp.route('/profile',methods=['GET','OPTIONS'])
 def profile():
+    if request.method == 'OPTIONS':
+        # 返回响应头部信息
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        }
+        return '', 200, headers
+    if request.method =='GET':
     # 获取token
-    auth_header = request.headers.get('Authorization')
-    token = auth_header.split(" ")[1] if auth_header else None
+        print("profile",request.headers)
+        auth_header = request.headers.get('Authorization')
+        print(auth_header)
+        token = auth_header.split(" ")[0] if auth_header else None
 
-    # 验证token
-    if not token:
-        print(666)
-        return jsonify({"msg": "Missing token"}), 401
+        # 验证token
+        if not token:
+            print(666)
+            return jsonify({"msg": "Missing token"}), 401
 
-    try:
-        data = validate_token(token)
-        current_user = data['sub']
-    except:
-        return jsonify({"msg": "Invalid token"}), 403
+        try:
+            data = validate_token(token)
+            print(data)
+            current_user = data['sub']
+            print(current_user,"data['sub']",type(current_user))
+        except:
+            return jsonify({"msg": "Invalid token"}), 403
 
-        # 返回用户信息
-    if current_user == 'john':
-        return jsonify({"profile": "John's profile"})
-    elif current_user == 'mary':
-        return jsonify({"profile": "Mary's profile"})
-
-    return jsonify({"msg": "User not found"}), 404
+            # 返回用户信息
+        if current_user == '123':
+            return jsonify({"profile": "John's profile"})
+        elif current_user == 'mary':
+            return jsonify({"profile": "Mary's profile"})
+        else:
+            return jsonify({"msg": "User not found"}), 404
