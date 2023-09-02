@@ -61,14 +61,14 @@ def profile():
         try:
             data = validate_token(token)
             print(data)
-            current_user = data['sub']
-            print(current_user,"data['sub']",type(current_user))
+            current_user = data['user']
+            print(current_user,"data['user']",type(current_user))
         except:
             return jsonify({"msg": "Invalid token"}), 403
 
             # 返回用户信息
         if current_user == '123':
-            return jsonify({"profile": "John's profile"})
+            return jsonify({"profile": current_user})
         elif current_user == 'mary':
             return jsonify({"profile": "Mary's profile"})
         else:

@@ -17,7 +17,7 @@ const  router = createRouter({
             name: 'Layout',
             children:[
                 {
-                    path: '/',
+                    path: '/Home',
                     component:() => import("../view/MenuItem/Home.vue"),
                     name: 'Home',
                 },

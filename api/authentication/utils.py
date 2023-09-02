@@ -6,7 +6,7 @@ import jwt
 # 生成JWT
 def generate_token(user):
     payload = {
-        'sub': user,
+        'user': user,
         'exp': dt.datetime.utcnow() + dt.timedelta(days=1)
     }
     token = jwt.encode(payload, 'secret', 'HS256')

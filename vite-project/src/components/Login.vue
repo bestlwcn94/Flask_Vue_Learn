@@ -19,7 +19,7 @@
 
         <el-button class="login-btn" type="primary" @click="handleLogin">登录</el-button>
         <el-button class="change-pwd-btn" @click="checklogin">修改密码</el-button>
-        <el-button class="register-btn">注册</el-button>
+        <el-button class="register-btn" @click="zhuce">注册</el-button>
 
       </el-form>
 
@@ -65,7 +65,6 @@ const handleLogin =() => {
   })
 
 }
-
 const checklogin =()=> {
   console.log(111)
   let token = localStorage.getItem('token')
@@ -80,12 +79,23 @@ const checklogin =()=> {
 
      axios.get('/profile',{headers:{'Authorization': token}}).then(res => {
       console.log(res.data.profile)
+       if (res.data.profile==loginForm.username) {
+         console.log('验证成功')
+         router.push('/ee')
+       }
      })
 
   } catch (error) {
     console.log('请求失败', error)
   }
 
+}
+
+
+const zhuce=()=>{
+      let token = localStorage.getItem('token')
+      axios.get('/z', {params:{'username':loginForm.username, 'password':loginForm.password},headers:{'Authorization': token}}).then(res => {
+      console.log(res.data)})
 }
 
 </script>
